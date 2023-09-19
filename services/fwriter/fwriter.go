@@ -1,15 +1,15 @@
-package logwriter
+package fwriter
 
 import (
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 )
 
-const FileName string = "driver.log"
+var defaultFileName = "driver.log"
 
 func New() io.Writer {
 	return &lumberjack.Logger{
-		Filename:   FileName,
+		Filename:   defaultFileName,
 		MaxSize:    100,
 		MaxAge:     30,
 		MaxBackups: 0,

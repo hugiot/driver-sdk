@@ -5,7 +5,11 @@ import (
 	"github.com/hugiot/gioc"
 )
 
-func InitContainer() {
+// initContainer init ioc container
+func initContainer() {
+	// add providers
 	gioc.AddServerProvider(&providers.AppServiceProvider{})
+
+	// boot
 	gioc.Boot()
 }

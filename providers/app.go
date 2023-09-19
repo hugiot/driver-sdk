@@ -3,13 +3,13 @@ package providers
 import (
 	"github.com/hugiot/driver-sdk/common"
 	"github.com/hugiot/driver-sdk/services/config"
+	"github.com/hugiot/driver-sdk/services/fwriter"
 	"github.com/hugiot/driver-sdk/services/http"
 	"github.com/hugiot/driver-sdk/services/logger"
-	"github.com/hugiot/driver-sdk/services/logwriter"
 	"github.com/hugiot/gioc"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"gopkg.in/natefinch/lumberjack.v2"
+	"io"
 )
 
 type AppServiceProvider struct {
@@ -21,16 +21,16 @@ func (sp *AppServiceProvider) Register(c gioc.ServiceContainer) {
 		return config.New()
 	})
 
-	// log writer
-	c.Single(common.LogWriterService, func(sc gioc.ServiceContainer) any {
-		return logwriter.New()
+	// file writer
+	c.Single(common.FileWriterService, func(sc gioc.ServiceContainer) any {
+		return fwriter.New()
 	})
 
 	// logger
 	c.Single(common.LoggerService, func(sc gioc.ServiceContainer) any {
-		w := sc.Make(common.LogWriterService).(*lumberjack.Logger)
+		w := sc.Make(common.FileWriterService).(io.Writer)
 		conf := sc.Make(common.ConfigService).(*viper.Viper)
-		return logger.New(w, conf)
+		return logger.New(w, conf.GetString(common.LogLevelConfig))
 	})
 
 	// http

@@ -5,12 +5,12 @@ import (
 	"log"
 )
 
-const File string = "config.toml"
+var defaultFileName = "config.toml"
 
 func New() *viper.Viper {
 	v := viper.New()
 	v.AddConfigPath(".")
-	v.SetConfigFile(File)
+	v.SetConfigFile(defaultFileName)
 	if err := v.ReadInConfig(); err != nil {
 		log.Fatal("init config error", err)
 	}

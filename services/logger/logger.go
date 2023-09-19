@@ -1,22 +1,20 @@
 package logger
 
 import (
-	"github.com/hugiot/driver-sdk/common"
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"
 	"strings"
 )
 
-func New(w io.Writer, c *viper.Viper) *zap.Logger {
+func New(w io.Writer, level string) *zap.Logger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05")
 	encoderConfig.ConsoleSeparator = " | "
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encoder := zapcore.NewConsoleEncoder(encoderConfig)
 	writer := zapcore.AddSync(w)
-	l := convLevel(c.GetString(common.HttpBindConfig))
+	l := convLevel(level)
 	core := zapcore.NewCore(encoder, writer, l)
 	return zap.New(core)
 }

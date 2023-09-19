@@ -8,8 +8,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Start http service
 func Start(driver any) error {
-	InitContainer()
+	initContainer()
 
 	c := gioc.Make(common.ConfigService).(*viper.Viper)
 

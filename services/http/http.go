@@ -11,8 +11,13 @@ func New(l *zap.Logger) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	r.Use(middleware.Logger(l), gin.Recovery())
-	r.GET("ping", func(c *gin.Context) {
-		c.String(http2.StatusOK, "pong")
-	})
+	r.GET("/ping", ping())
 	return r
+}
+
+// ping handle ping request
+func ping() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Status(http2.StatusOK)
+	}
 }
